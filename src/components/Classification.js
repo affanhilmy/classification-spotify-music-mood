@@ -8,16 +8,7 @@ import axios from "axios";
 import { useParams } from 'react-router-dom';
 import music from '../images/music.jpeg';
 import Loader from './Loader';
-// import { RandomForest } from './randomForest';
-// import { RandomForestClassifier as RFClassifier } from 'ml-random-forest';
-// import {
-//     getClasses,
-//     getClassesAsNumber,
-//     getCrossValidationSets,
-//     getDataset,
-//     getDistinctClasses,
-//     getNumbers,
-//   } from 'ml-dataset-iris';
+
 
 export const Classification  = (props) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -28,19 +19,6 @@ export const Classification  = (props) => {
     const { id } = useParams();
     const {danceability, tempo, energy, valence} = features;
     const datatest = {tempo, danceability, energy, valence};
-    
-    
-    // const datauji = [
-    //     {
-    //         "length":5.3,
-    //         "width":5.5,
-    //         "petal_length":2,
-    //         "petal_width":1.9,
-    //     }
-    // ]
-
-    const fs = require('fs'),
-        RandomForestClassifier = require('random-forest-classifier').RandomForestClassifier;
     
     const getDataset = async () => {
         const response = await axios.get('http://localhost:5000/dataset');
@@ -54,10 +32,9 @@ export const Classification  = (props) => {
         return copy;
     }
 
-    const randomForest = async () => {
+    const fuzzyMamdani = async () => {
         setIsLoading(true);
         const datalatih = await getDataset();
-        const newDatatest = [datatest];
 
         const max = {
             danceability: Math.max(...datalatih.map(o => o.dancebility)),
@@ -73,7 +50,7 @@ export const Classification  = (props) => {
             valance: Math.min(...datalatih.map(o => o.valance))
         }
 
-        // console.log(max,min);
+        console.log(max,min);
         console.log(datatest);
 
         //Fuzzification
@@ -89,8 +66,6 @@ export const Classification  = (props) => {
         }
 
         console.log(fuzzy);
-
-        // const defuzzification = [datalatih];
 
         const check_valance = check => {if(check<0.5) {return fuzzy.valance_min} else return fuzzy.valance_max}
         const check_energy = check => {if(check<0.5) {return fuzzy.energy_min} else return fuzzy.energy_max}
@@ -111,20 +86,12 @@ export const Classification  = (props) => {
         console.log(rulesDefuzzification);
         console.log(maxRules);
 
-        // const defuzzification = [];
-
         var defuzzification = Object.values(maxRules.reduce(function(r, e) {
             if(!r[e.mood]) r[e.mood] = e;
             else if(e.value > r[e.mood].value) r[e.mood] = e;
             return r;
         }, {}))
-        // maxRules.forEach(function(item){
-        //     var i = defuzzification.findIndex(x => x.mood == item.mood && x.value );
-        //     if(i <= -1){
-        //       defuzzification.push({valance: item.valance, energy: item.energy, danceability: item.dancebility, tempo: item.tempo, mood: item.mood});
-        //     }
-        // });
-
+        
         console.log(defuzzification);
         
         const verdict = Math.max(...defuzzification.map(o => o.value))
@@ -133,75 +100,7 @@ export const Classification  = (props) => {
 
         console.log(verdict);
         console.log(prediction);
-        setMood(prediction[0]);
-
-
-        
-        
-        //karpathy rf
-        // const trainingSet = getNumbers();
-        // const predictions = getClasses().map((elem) =>
-        //     getDistinctClasses().indexOf(elem)
-        // );
-        // const datalatih3 = datalatih2
-        // const dataPred = datalatih2
-        // datalatih3.map((datalatih3)=> {
-        //     delete datalatih3.mood
-        // })
-        // dataPred.map((dataPred)=> {
-        //     delete dataPred.danceability
-        //     delete dataPred.energy
-        //     delete dataPred.tempo
-        //     delete dataPred.valence
-        // })
-        // console.log(datalatih3);
-        // console.log(dataPred);
-        // data is 2D array of size NxD. Labels is 1D array of length D
-        // RandomForest.train(datalatih3, dataPred); 
-        // testData is 2D array of size MxD. Returns array of probabilities of length M
-        // const labelProbabilities = RandomForest.predict(trainingSet);
-
-        //ml rf
-        // const trainingSet = getNumbers();
-        // let predictions = getClasses();
-        // const datalatih3 = datalatih2
-        // const dataPred = datalatih2
-        // datalatih3.map((datalatih3)=> {
-        //     delete datalatih3.mood
-        // })
-
-        // console.log(datalatih3);
-        // console.log(predic);
-        // const options = {
-        //     seed: 4,
-        //     maxFeatures: 0.8,
-        //     replacement: true,
-        //     nEstimators: 10
-        // };
-          
-        // const classifier = new RFClassifier(options);
-        // classifier.train(datalatih3, predic);
-        // const result = classifier.predict(datalatih);
-        // setMood(result);
-        
-        
-        //jessfraz rf
-        // const rf = new RandomForestClassifier({
-        //     n_estimators: 25
-        // });
-        // console.log('datatest');
-        // console.log(newDatatest); 
-        // rf.fit(datalatih, [energy], 'mood', function(err, trees){
-        //     console.log(JSON.stringify(trees, null, 4));
-        //     var pred = rf.predict(newDatatest, trees);
-        //     // console.log('pred');
-        //     console.log(datalatih);
-        //     console.log(datalatih2);
-        //     console.log(pred);
-        //     console.log(err);
-        //     setMood(pred);
-        // });       
-        
+        setMood(prediction[0]);    
 
 
         setIsLoading(false);
@@ -226,7 +125,6 @@ export const Classification  = (props) => {
         if (isValidSession()) {
             fetchTrack();
             fetchFeatures()
-            // randomForest()
         } else {
             props.dispatch(resetDispatch());
             history.push({
@@ -270,7 +168,7 @@ export const Classification  = (props) => {
                         {track.name}
                     </small>
                 </Card.Text>
-                <Button variant='success' style={{'flex-direction': 'column'}} onClick={randomForest} > 
+                <Button variant='success' style={{'flex-direction': 'column'}} onClick={fuzzyMamdani} > 
                     {!_.isEmpty(Mood) ? (
                         Mood
                     ):(
