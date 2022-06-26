@@ -86,6 +86,7 @@ export const Classification  = (props) => {
         console.log(rulesDefuzzification);
         console.log(maxRules);
 
+        //Defuzzification
         var defuzzification = Object.values(maxRules.reduce(function(r, e) {
             if(!r[e.mood]) r[e.mood] = e;
             else if(e.value > r[e.mood].value) r[e.mood] = e;
@@ -98,8 +99,8 @@ export const Classification  = (props) => {
         const prediction= [];
         defuzzification.forEach((item, index) => item.value === verdict ? prediction.push(item.mood): null);
 
-        console.log(verdict);
-        console.log(prediction);
+        // console.log(verdict);
+        // console.log(prediction);
         setMood(prediction[0]);    
 
 
