@@ -1,12 +1,19 @@
 To run this project, 
 
-open `.env` file and add your client_id from spotify dashboard and then open terminal and execute the following commands in sequence
+Open terminal and execute the following commands in sequence
 
 ```js
 1. yarn install
 2. yarn start
 ```
-Add the dataset.sql to your database.
+
+Then create database named 'mood_music' and add the dataset.sql file to your database.
+To start the backend open terminal and execute the following commands in sequence
+
+```js
+1. cd src/backend
+2. nodemon index
+```
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
