@@ -1,4 +1,4 @@
-This Project build with react.js as frontend and express.js as backend
+This Project build with react.js as frontend and express.js as backend. <br />
 To run this project, first you have to install NPM.
 
 Open terminal and execute the following commands in sequence
