@@ -1,4 +1,5 @@
-To run this project, 
+This Project build with react.js as frontend and express.js as backend
+To run this project, first you have to install NPM.
 
 Open terminal and execute the following commands in sequence
 
@@ -8,7 +9,7 @@ Open terminal and execute the following commands in sequence
 ```
 
 Then create database named 'mood_music' and add the dataset.sql file to your database.
-To start the backend open terminal and execute the following commands in sequence
+To start the backend open terminal and execute the following these commands in sequence
 
 ```js
 1. cd src/backend
